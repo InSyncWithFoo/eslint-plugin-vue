@@ -52,6 +52,21 @@ ruleTester.run('one-component-per-file', rule, {
         Vue.mixin({})
         Vue.component('name', {})
       `
+    },
+    {
+      filename: 'test.js',
+      code: `
+        import { createApp } from 'vue'
+        createApp({})
+      `
+    },
+    {
+      filename: 'test.js',
+      code: `
+        import { createApp } from 'other.js'
+        createApp({})
+        createApp({})
+      `
     }
   ],
   invalid: [
@@ -88,6 +103,18 @@ ruleTester.run('one-component-per-file', rule, {
       code: `
         Vue.component('name', {})
         export default {}
+      `,
+      errors: [
+        'There is more than one component in this file.',
+        'There is more than one component in this file.'
+      ]
+    },
+    {
+      filename: 'test.vue',
+      code: `
+        import { createApp } from 'vue'
+        createApp({})
+        createApp({})
       `,
       errors: [
         'There is more than one component in this file.',
